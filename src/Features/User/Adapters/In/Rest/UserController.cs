@@ -1,6 +1,8 @@
 using APIWEB.src.Features.User.Domain.Ports;
 using APIWEB.src.Features.User.Infrastructure.Dto;
+using APIWEB.src.Features.User.Infrastructure.Mappers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace APIWEB.src.Features.User.Adapters.In.Rest
 {
@@ -36,21 +38,14 @@ namespace APIWEB.src.Features.User.Adapters.In.Rest
             }
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(string id)
         {
             try
             {
                 var user = await _findUserByIdUseCase.Execute(id);
-                var userDto = new UserResponseDto
-                {
-                    Id = user.Id,
-                    Name = user.Name,
-                    Email = user.Email,
-                    CreatedAt = user.CreatedAt,
-                    UpdatedAt = user.UpdatedAt
-                };
-                return Ok(userDto);
+                return Ok(UserMapper.ToDto(user));
             }
             catch (Exception ex)
             {

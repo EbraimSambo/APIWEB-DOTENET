@@ -1,6 +1,29 @@
 @APIWEB_HostAddress = http://localhost:5146
 
-GET {{APIWEB_HostAddress}}/weatherforecast/
+### Criar um novo usuário (pública)
+POST {{APIWEB_HostAddress}}/api/users
+Content-Type: application/json
+
+{
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "password": "Senha@123"
+}
+
+### Login (pública - retorna token)
+POST {{APIWEB_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "joao@example.com",
+  "password": "Senha@123"
+}
+
+### Obter usuário por ID (PROTEGIDA - requer token)
+GET {{APIWEB_HostAddress}}/api/users/1
+Authorization: Bearer <seu-token-aqui>
 Accept: application/json
 
-###
+### GET Weather Forecast
+GET {{APIWEB_HostAddress}}/weatherforecast/
+Accept: application/json
