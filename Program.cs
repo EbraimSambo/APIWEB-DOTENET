@@ -1,4 +1,9 @@
 using APIWEB.src.Shared.Infrastructure.Configurations;
+using APIWEB.src.Features.User.Domain.Ports;
+using APIWEB.src.Features.User.Adapters.Out.Persistence;
+using APIWEB.src.Features.User.Adapters.In.Rest;
+using APIWEB.src.Features.User.Application.ports;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,11 +11,21 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddControllers();
+
+// Adicionar FluentValidation
+builder.Services.AddScoped<IValidator<CreateUserRequest>, CreateUserRequestValidator>();
 
 // Configurar o DbContext com PostgreSQL
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
+
+// Registrar o repositório
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+// Registrar o use case
+builder.Services.AddScoped<ICreateUserUseCase, CreateUserUseCase>();
 
 var app = builder.Build();
 
@@ -22,28 +37,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
