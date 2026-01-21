@@ -2,6 +2,7 @@ using APIWEB.src.Features.User.Domain.Ports;
 using UserEntity = APIWEB.src.Features.User.Domain.Entity.User;
 using System.Threading.Tasks;
 using APIWEB.src.Features.Auth.Domain.Ports;
+using System.Security.Cryptography;
 
 namespace APIWEB.src.Features.User.Application.ports
 {
@@ -25,13 +26,16 @@ namespace APIWEB.src.Features.User.Application.ports
             }
 
             var now = DateTime.UtcNow;
+            var salt = RandomNumberGenerator.GetBytes(16);
+            var hashedPassword = _hashService.HashPassword(input.Password, salt);
+            
             var user = new UserEntity
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = input.Name,
                 Email = input.Email,
-                Password = input.Password,
-                Salt = _hashService.HashPassword(input.Password, new byte[16]),
+                Password = Convert.ToBase64String(hashedPassword),
+                Salt = salt,
                 CreatedAt = now,
                 UpdatedAt = now
             };
