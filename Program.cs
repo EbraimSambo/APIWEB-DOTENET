@@ -26,6 +26,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Registrar o use case
 builder.Services.AddScoped<ICreateUserUseCase, CreateUserUseCase>();
+builder.Services.AddScoped<IFindUserByIdUseCase, FindUserByIdUseCase>();
 
 var app = builder.Build();
 

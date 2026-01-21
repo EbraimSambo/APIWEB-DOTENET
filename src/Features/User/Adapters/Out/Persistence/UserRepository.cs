@@ -27,5 +27,11 @@ namespace APIWEB.src.Features.User.Adapters.Out.Persistence
             return await _context.Users
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
+
+        public async Task<UserEntity?> findById(string id)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == id);
+        }
     }
 }

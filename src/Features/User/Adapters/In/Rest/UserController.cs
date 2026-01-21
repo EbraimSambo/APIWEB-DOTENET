@@ -8,10 +8,12 @@ namespace APIWEB.src.Features.User.Adapters.In.Rest
     public class UserController : ControllerBase
     {
         private readonly ICreateUserUseCase _createUserUseCase;
+        private readonly IFindUserByIdUseCase _findUserByIdUseCase;
 
-        public UserController(ICreateUserUseCase createUserUseCase)
+        public UserController(ICreateUserUseCase createUserUseCase, IFindUserByIdUseCase findUserByIdUseCase)
         {
             _createUserUseCase = createUserUseCase;
+            _findUserByIdUseCase = findUserByIdUseCase;
         }
 
         [HttpPost]
@@ -31,6 +33,21 @@ namespace APIWEB.src.Features.User.Adapters.In.Rest
             {
                 return StatusCode(500, new { error = "Internal server error", details = ex.Message });
             }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById(string id)
+        {
+            try
+            {
+                var user = await _findUserByIdUseCase.Execute(id);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+            return Ok();
         }
     }
 }

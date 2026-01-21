@@ -8,5 +8,7 @@ namespace APIWEB.src.Features.User.Domain.Ports
         Task<UserEntity> save(UserEntity user);
 
         Task<UserEntity?> findByEmail(string email);
+
+        Task<UserEntity?> findById(string id);
     }
 }
