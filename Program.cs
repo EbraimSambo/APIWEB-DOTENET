@@ -3,6 +3,8 @@ using APIWEB.src.Features.User.Domain.Ports;
 using APIWEB.src.Features.User.Adapters.Out.Persistence;
 using APIWEB.src.Features.User.Adapters.In.Rest;
 using APIWEB.src.Features.User.Application.ports;
+using APIWEB.src.Features.Auth.Domain.Ports;
+using APIWEB.src.Features.Auth.Infrastructure.Ports;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +29,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 // Registrar o use case
 builder.Services.AddScoped<ICreateUserUseCase, CreateUserUseCase>();
 builder.Services.AddScoped<IFindUserByIdUseCase, FindUserByIdUseCase>();
+builder.Services.AddScoped<IHashService, HashService>();
 
 var app = builder.Build();
 

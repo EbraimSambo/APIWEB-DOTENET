@@ -1,4 +1,5 @@
 using APIWEB.src.Features.User.Domain.Ports;
+using APIWEB.src.Features.User.Infrastructure.Dto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIWEB.src.Features.User.Adapters.In.Rest
@@ -41,13 +42,20 @@ namespace APIWEB.src.Features.User.Adapters.In.Rest
             try
             {
                 var user = await _findUserByIdUseCase.Execute(id);
-                return Ok(user);
+                var userDto = new UserResponseDto
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Email = user.Email,
+                    CreatedAt = user.CreatedAt,
+                    UpdatedAt = user.UpdatedAt
+                };
+                return Ok(userDto);
             }
             catch (Exception ex)
             {
                 return NotFound(new { error = ex.Message });
             }
-            return Ok();
         }
     }
 }

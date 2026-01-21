@@ -43,6 +43,10 @@ namespace APIWEB.src.Shared.Infrastructure.Configurations
                     .IsRequired()
                     .HasColumnName("password");
 
+                entity.Property(e => e.Salt)
+                    .IsRequired()
+                    .HasColumnName("salt");
+
                 entity.Property(e => e.CreatedAt)
                     .HasColumnName("created_at");
 

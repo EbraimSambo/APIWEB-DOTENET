@@ -1,16 +1,19 @@
 using APIWEB.src.Features.User.Domain.Ports;
 using UserEntity = APIWEB.src.Features.User.Domain.Entity.User;
 using System.Threading.Tasks;
+using APIWEB.src.Features.Auth.Domain.Ports;
 
 namespace APIWEB.src.Features.User.Application.ports
 {
     public class CreateUserUseCase : ICreateUserUseCase
     {
         private readonly IUserRepository _userRepository;
+        private readonly IHashService _hashService;
 
-        public CreateUserUseCase(IUserRepository userRepository)
+        public CreateUserUseCase(IUserRepository userRepository, IHashService hashService)
         {
             _userRepository = userRepository;
+            _hashService = hashService;
         }
 
         public async Task Execute(ICreateUserUseCase.Input input)
@@ -28,6 +31,7 @@ namespace APIWEB.src.Features.User.Application.ports
                 Name = input.Name,
                 Email = input.Email,
                 Password = input.Password,
+                Salt = _hashService.HashPassword(input.Password, new byte[16]),
                 CreatedAt = now,
                 UpdatedAt = now
             };

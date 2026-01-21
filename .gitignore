@@ -1,3 +1,9 @@
 
-/bin
-/bin/Debug/
+bin
+bin/Debug/
+obj/
+
+*.cs 
+*.csproj
+*.sln
+appsettings.json
