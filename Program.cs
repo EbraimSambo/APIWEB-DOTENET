@@ -17,8 +17,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseOpenApi();
-    app.UseSwaggerUi();
+    app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();

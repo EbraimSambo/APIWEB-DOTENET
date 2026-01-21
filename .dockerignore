@@ -1,0 +1,50 @@
+# .NET build artifacts
+**/bin/
+**/obj/
+**/*.user
+**/*.suo
+**/*.cache
+**/*.dll
+
+# VS Code files
+.vscode/
+
+# macOS
+.DS_Store
+
+# Git
+.git/
+.gitignore
+
+# Docker files
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Documentation
+README.md
+*.md
+
+# Logs
+logs/
+*.log
+
+# Node.js (if any)
+node_modules/
+
+# Environment files
+.env
+.env.*
+
+# Test results
+TestResults/
+coverage/
+
+# IDE files
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
