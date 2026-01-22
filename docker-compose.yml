@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: apiweb-postgres
+    environment:
+      POSTGRES_DB: apiweb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - apiweb-network
+
+  # API WEB Application
+  api:
+    container_name: apiweb-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=apiweb;Username=postgres;Password=postgres
+    ports:
+      - "5000:80"
+      - "5001:443"
+    depends_on:
+      - postgres
+    volumes:
+      - ./appsettings.Development.json:/app/appsettings.Development.json:ro
+    networks:
+      - apiweb-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  apiweb-network:
+    driver: bridge
